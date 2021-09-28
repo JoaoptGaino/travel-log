@@ -35,7 +35,7 @@ model Country {
 model State {
   id        String  @id @default(uuid())
   name      String
-  initials  String
+  initials  String  @unique
   countryId String  @map("country_id")
   Country   Country @relation(fields: [countryId], references: [id])
   City      City[]
@@ -50,5 +50,6 @@ model City {
 
   State   State     @relation(fields: [stateId], references: [id])
   AppUser AppUser[]
+  @@unique([stateId, id], name: "StateCityConstraint")
   @@map("city")
 }
