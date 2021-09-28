@@ -1,0 +1,11 @@
+version: '3'
+services:
+  easy-travel-db:
+    container_name: easy-travel-db
+    image: postgres:13.4-alpine
+    environment:
+      - 'POSTGRES_DB=easy_travel'
+      - 'POSTGRES_USER=root'
+      - 'POSTGRES_PASSWORD=root'
+    ports:
+      - '5432:5432'
