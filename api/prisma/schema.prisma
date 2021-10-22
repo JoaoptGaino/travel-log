@@ -25,31 +25,35 @@ model AppUser {
 }
 
 model Country {
-  id    String  @id @default(uuid())
-  name  String
-  State State[]
+  id        String  @id @default(uuid())
+  name      String
+  phoneCode String  @map("phone_code")
+  isoCode   String  @unique @map("iso_code")
+  State     State[]
 
   @@map("country")
 }
 
 model State {
-  id        String  @id @default(uuid())
-  name      String
-  initials  String  @unique
-  countryId String  @map("country_id")
-  Country   Country @relation(fields: [countryId], references: [id])
-  City      City[]
+  id          String  @id @default(uuid())
+  name        String
+  isoCode     String  @unique @map("iso_code")
+  countryCode String  @map("country_code")
+  Country     Country @relation(fields: [countryCode], references: [isoCode])
+  City        City[]
 
   @@map("state")
 }
 
 model City {
-  id      String @id @default(uuid())
-  name    String
-  stateId String @map("state_id")
+  id        String    @id @default(uuid())
+  name      String
+  stateCode String    @unique @map("state_code")
+  longitude String
+  latitude  String
+  State     State     @relation(fields: [stateCode], references: [isoCode])
+  AppUser   AppUser[]
 
-  State   State     @relation(fields: [stateId], references: [id])
-  AppUser AppUser[]
-  @@unique([stateId, id], name: "StateCityConstraint")
+  @@unique([stateCode, id], name: "StateCityConstraint")
   @@map("city")
 }
